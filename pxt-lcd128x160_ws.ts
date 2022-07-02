@@ -1,12 +1,12 @@
 /*****************************************************************************
-* | File      	:   1in8LCD.ts
-* | Author      :   hnwangkg-ezio for Waveshare 
-* | Function    :   Contorl 1.8inch lcd Show
-* | Info        :
+* | File      	:   pxt-lcd128x160_ws.ts
+* | Author      :   Franz X. Stolz
+* | Function    :   pxt extension for 1.8inch lcd display from waveshare
+* | Info        :   it uses the SPI-interface, be aware about proper SPI-configuration
 *----------------
-* | This version:   V2.0
-* | Date        :   2021-01-28
-* | Info        :   for micro:bit v2
+* | This version:   v1.0
+* | Date        :   2022-06-30
+* | Info        :   for calliope mini (rev2) and makecode editor
 *
 ******************************************************************************/
 let GUI_BACKGROUND_COLOR = 1
@@ -358,7 +358,7 @@ let Font12_Table: number[] =
         0x00, //        
         0x00, //        
         0x00, //        
-
+/*
         // @252 '5' (7 pixels wide)
         0x00, //        
         0x3C, //   #### 
@@ -1255,6 +1255,7 @@ let Font12_Table: number[] =
         0x00, //        
         0x00, //        
 
+  
         // @1020 'u' (7 pixels wide)
         0x00, //        
         0x00, //        
@@ -1393,7 +1394,7 @@ let Font12_Table: number[] =
         0x00, //        
         0x00, //        
         0x00, //        
-        0x00, //        
+        0x00, //        */
     ];
 
 
@@ -1591,62 +1592,6 @@ namespace LCD1IN8 {
         LCD_WriteData_8Bit(Color >> 8);
         LCD_WriteData_8Bit(Color & 0xff);
        
-    }
-
-    //% blockId=Draw_Clear
-    //% blockGap=8
-    //% block="Clear Drawing cache"
-    //% weight=195
-    export function LCD_ClearBuf(): void {
-        let i;
-        pins.digitalWritePin(DigitalPin.P2, 0);
-    /*  SPIRAM_Set_Mode(SRAM_STREAM_MODE);
-        pins.digitalWritePin(DigitalPin.P2, 0);
-        pins.spiWrite(SRAM_CMD_WRITE);
-        pins.spiWrite(0);
-        pins.spiWrite(0);
-        pins.spiWrite(0);
-    */    
-        for (i = 0; i < 160 * 2 * 128; i++) {
-            pins.spiWrite(0xff);
-        }
-        pins.digitalWritePin(DigitalPin.P2, 1);
-    }
-
-    //% blockId=LCD_Display
-    //% blockGap=8
-    //% block="Show Full Screen"
-    //% weight=190
-    export function LCD_Display(): void {
-        SPIRAM_Set_Mode(SRAM_STREAM_MODE);
-        LCD_SetWindows(0, 0, 160, 128);
-        let rbuf = [];
-        for (let i = 0; i < 640; i++) {
-            rbuf[i] = 0;
-        }
-
-        let rdata = 0;
-        for (let i = 0; i < 64; i++) { // read 2line
-            pins.digitalWritePin(DigitalPin.P2, 0);
-            pins.spiWrite(SRAM_CMD_READ);
-            pins.spiWrite(0);
-            pins.spiWrite((640 * i) >> 8);
-            pins.spiWrite((640 * i) & 0xff);
-            for (let offset = 0; offset < 640; offset++) {
-                rbuf[offset] = pins.spiWrite(0x00);
-            }
-            pins.digitalWritePin(DigitalPin.P2, 1);
-
-            pins.digitalWritePin(DigitalPin.P1, 1);
-            pins.digitalWritePin(DigitalPin.P2, 0);
-            for (let offset = 0; offset < 640; offset++) {
-                pins.spiWrite(rbuf[offset]);
-            }
-            pins.digitalWritePin(DigitalPin.P2, 1);
-        }
-
-        //Turn on the LCD display
-        LCD_WriteReg(0x29);
     }
 
     //% blockId=DrawPoint
@@ -1859,6 +1804,72 @@ namespace LCD1IN8 {
         }// Write all
     }
 
+
+    function Swop_AB(Point1: number, Point2: number): void {
+        let Temp = 0;
+        Temp = Point1;
+        Point1 = Point2;
+        Point2 = Temp;
+    }
+
+    // unsed functions for calliope
+
+    //% blockId=Draw_Clear
+    //% blockGap=8
+    //% block="Clear Drawing cache"
+    //% weight=80
+    export function LCD_ClearBuf(): void {
+        let i;
+        pins.digitalWritePin(DigitalPin.P2, 0);
+        /*  SPIRAM_Set_Mode(SRAM_STREAM_MODE);
+            pins.digitalWritePin(DigitalPin.P2, 0);
+            pins.spiWrite(SRAM_CMD_WRITE);
+            pins.spiWrite(0);
+            pins.spiWrite(0);
+            pins.spiWrite(0);
+        */
+        for (i = 0; i < 160 * 2 * 128; i++) {
+            pins.spiWrite(0xff);
+        }
+        pins.digitalWritePin(DigitalPin.P2, 1);
+    }
+
+    //% blockId=LCD_Display
+    //% blockGap=8
+    //% block="Show Full Screen"
+    //% weight=70
+    export function LCD_Display(): void {
+        SPIRAM_Set_Mode(SRAM_STREAM_MODE);
+        LCD_SetWindows(0, 0, 160, 128);
+        let rbuf = [];
+        for (let i = 0; i < 640; i++) {
+            rbuf[i] = 0;
+        }
+
+        let rdata = 0;
+        for (let i = 0; i < 64; i++) { // read 2line
+            pins.digitalWritePin(DigitalPin.P2, 0);
+            pins.spiWrite(SRAM_CMD_READ);
+            pins.spiWrite(0);
+            pins.spiWrite((640 * i) >> 8);
+            pins.spiWrite((640 * i) & 0xff);
+            for (let offset = 0; offset < 640; offset++) {
+                rbuf[offset] = pins.spiWrite(0x00);
+            }
+            pins.digitalWritePin(DigitalPin.P2, 1);
+
+            pins.digitalWritePin(DigitalPin.P1, 1);
+            pins.digitalWritePin(DigitalPin.P2, 0);
+            for (let offset = 0; offset < 640; offset++) {
+                pins.spiWrite(rbuf[offset]);
+            }
+            pins.digitalWritePin(DigitalPin.P2, 1);
+        }
+
+        //Turn on the LCD display
+        LCD_WriteReg(0x29);
+    }
+
     //spi ram
     function SPIRAM_Set_Mode(mode: number): void {
         pins.digitalWritePin(DigitalPin.P2, 0);
@@ -1888,12 +1899,5 @@ namespace LCD1IN8 {
         pins.spiWrite(Addr);
         pins.spiWrite(Data);
         pins.digitalWritePin(DigitalPin.P2, 1);
-    }
-
-    function Swop_AB(Point1: number, Point2: number): void {
-        let Temp = 0;
-        Temp = Point1;
-        Point1 = Point2;
-        Point2 = Temp;
     }
 }

@@ -7,6 +7,12 @@ input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
     DRAW_FILL.DRAW_FULL,
     DOT_PIXEL.DOT_PIXEL_2
     )
+    LCD1IN8.DisNumber(
+    30,
+    40,
+    111,
+    57607
+    )
 })
 input.onButtonEvent(Button.B, ButtonEvent.Click, function () {
     LCD1IN8.DrawPoint(
