@@ -106,7 +106,7 @@ let Font12_Table: number[] =
         0x00, //        
         0x00, //        
         0x00, //        
-
+/*
         // @36 '#' (7 pixels wide)
         0x00, //        
         0x14, //    # # 
@@ -358,7 +358,7 @@ let Font12_Table: number[] =
         0x00, //        
         0x00, //        
         0x00, //        
-/*
+
         // @252 '5' (7 pixels wide)
         0x00, //        
         0x3C, //   #### 

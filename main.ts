@@ -7,11 +7,11 @@ input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
     DRAW_FILL.DRAW_FULL,
     DOT_PIXEL.DOT_PIXEL_2
     )
-    LCD1IN8.DisNumber(
+    LCD1IN8.DisString(
     30,
     40,
-    111,
-    57607
+    "!&!",
+    56022
     )
 })
 input.onButtonEvent(Button.B, ButtonEvent.Click, function () {
