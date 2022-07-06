@@ -10,7 +10,7 @@ input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
     LCD1IN8.DisString(
     30,
     40,
-    "!&!",
+    "!!!!",
     56022
     )
 })

@@ -63,7 +63,7 @@ enum DRAW_FILL {
     DRAW_FULL,
 };
 
-let Font12_Table: number[] =
+let Font12_Table: int8[] =
     [
         // @0 ' ' (7 pixels wide)
         0x00, //        
