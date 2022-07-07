@@ -3,6 +3,7 @@
 * | Author      :   Franz X. Stolz
 * | Function    :   pxt extension for 1.8inch lcd display from waveshare
 * | Info        :   it uses the SPI-interface, be aware about proper SPI-configuration
+* | Info        :   built in font: 12x7 pixel
 *----------------
 * | This version:   v1.0
 * | Date        :   2022-06-30
@@ -16,12 +17,19 @@ let GUI_BACKGROUND_COLOR = 1
 let LCD_WIDTH = 160  //LCD width
 let LCD_HEIGHT = 128 //LCD height
 
+
+let ColMaskRGB = 0xF7;  //and operation 
+let ColMaskBGR = 0x08;  //or operation
+let MADCTL160x128 = 0xA0; // 10100000;
+let MADCT128x160 = 0x00; // 00000000;
+let MADCTLregister = 0xA0 & ColMaskRGB; // default: color scheme: RBG and horizontal display usage 160x128
+
 /**
  * Color Scheme of Display
  */
 enum ColorScheme {
-    RGB = 0xC0,
-    BGR = 0xC8
+    RGB = 0xF7,
+    BGR = 0x08
 }
 
 enum COLOR {
@@ -59,7 +67,7 @@ enum DRAW_FILL {
 };
 
 /**
-    * TFT Commands
+    * LCD diver commands
     */
 enum TFTCommands {
     NOP = 0x00,
@@ -654,8 +662,22 @@ export const font12x7 = hex`
     export function setColorScheme(cScheme: ColorScheme): void {
         // adjustment of color ordering -> RGB vs BGR
         // RBG-> 0xC0  BGR -> 0xC8
-        LCD_WriteReg(TFTCommands.MADCTL);
-        LCD_WriteData_8Bit(cScheme);
+        // ColMaskRGB = 0xF7;  and operation !!
+        // ColMaskBGR = 0x08;  or operation !!
+        // MADCTL160x128 = 0xA0; // 10100000;
+        // MADCT128x160 = 0x00; // 00000000;
+        // MADCTLregister default = 0xA0 & ColMaskRGB; // color scheme: RBG and horizontal display usage 160x128
+        // LCD_WriteReg(0x36); //MX, MY, RGB mode
+        // LCD_WriteData_8Bit(0xF7 & 0xA0); //RGB color filter panel
+        if (cScheme == ColorScheme.RGB ){
+            LCD_WriteReg(TFTCommands.MADCTL);
+            LCD_WriteData_8Bit(MADCTLregister & ColMaskRGB);          
+        }
+        else{
+            LCD_WriteReg(TFTCommands.MADCTL);
+            LCD_WriteData_8Bit(MADCTLregister | ColMaskBGR);
+
+        }
     }
 
     

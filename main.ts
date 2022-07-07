@@ -12,6 +12,7 @@ input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
     COLOR.WHITE
     )
     LCD1IN8.setDisplayInverseMode(true)
+    LCD1IN8.setColorScheme(ColorScheme.BGR)
 })
 input.onButtonEvent(Button.B, ButtonEvent.Click, function () {
     LCD1IN8.DrawPoint(
@@ -40,6 +41,7 @@ input.onButtonEvent(Button.AB, ButtonEvent.Click, function () {
     DRAW_FILL.DRAW_EMPTY,
     DOT_PIXEL.DOT_PIXEL_1
     )
+    LCD1IN8.setColorScheme(ColorScheme.RGB)
 })
 LCD1IN8.LCD_Init()
 LCD1IN8.LCD_Clear()
