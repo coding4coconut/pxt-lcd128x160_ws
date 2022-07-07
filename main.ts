@@ -1,18 +1,17 @@
 input.onButtonEvent(Button.A, ButtonEvent.Click, function () {
-    LCD1IN8.DrawCircle(
-    80,
-    60,
-    20,
-    36467,
-    DRAW_FILL.DRAW_FULL,
-    DOT_PIXEL.DOT_PIXEL_2
-    )
     LCD1IN8.DisString(
     30,
-    40,
-    "!!!!",
-    56022
+    10,
+    "ABCabcXYZxyz123456789.,-&()/#+*:;_~}!",
+    COLOR.WHITE
     )
+    LCD1IN8.DisNumber(
+    10,
+    70,
+    1835245,
+    COLOR.WHITE
+    )
+    LCD1IN8.setDisplayInverseMode(true)
 })
 input.onButtonEvent(Button.B, ButtonEvent.Click, function () {
     LCD1IN8.DrawPoint(
@@ -21,6 +20,15 @@ input.onButtonEvent(Button.B, ButtonEvent.Click, function () {
     57607,
     DOT_PIXEL.DOT_PIXEL_4
     )
+    LCD1IN8.DrawCircle(
+    80,
+    60,
+    20,
+    36467,
+    DRAW_FILL.DRAW_EMPTY,
+    DOT_PIXEL.DOT_PIXEL_2
+    )
+    LCD1IN8.setDisplayInverseMode(false)
 })
 input.onButtonEvent(Button.AB, ButtonEvent.Click, function () {
     LCD1IN8.DrawRectangle(
@@ -41,10 +49,11 @@ LCD1IN8.DrawLine(
 139,
 10,
 63519,
-DOT_PIXEL.DOT_PIXEL_2,
+DOT_PIXEL.DOT_PIXEL_1,
 LINE_STYLE.LINE_DOTTED
 )
-basic.showIcon(IconNames.Heart)
+basic.showNumber(1)
+basic.pause(500)
 basic.forever(function () {
 	
 })
